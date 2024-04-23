@@ -88,4 +88,27 @@ class CourtReservationApplicationTests {
 		mvc.perform(delete("/api/res/delete/{resId}", 1)).andExpect(status().isOk());
 		mvc.perform(get("/api/res/all-res-list")).andExpect(jsonPath("$", hasSize(0)));
 	}
+
+	@Test
+	public void allReservationsForPhoneNumber() throws Exception {
+		mvc.perform(post("/api/res/create-res/{courtId}/{phoneNumber}", 2, "1234")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"desc\":\"myres\", \"startDate\":\"2024-05-25T10:55:56.280082426\", \"endDate\":\"2024-05-25T14:55:56.280082426\", \"kindOfGame\":\"FOUR_PLAYERS\"}"));
+		mvc.perform(post("/api/res/create-res/{courtId}/{phoneNumber}", 4, "123456")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"desc\":\"myres\", \"startDate\":\"2024-05-26T10:55:56.280082426\", \"endDate\":\"2024-05-26T14:55:56.280082426\", \"kindOfGame\":\"FOUR_PLAYERS\"}"));
+		mvc.perform(post("/api/res/create-res/{courtId}/{phoneNumber}", 4, "1234")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content("{\"desc\":\"myres\", \"startDate\":\"2024-05-27T10:55:56.280082426\", \"endDate\":\"2024-05-27T14:55:56.280082426\", \"kindOfGame\":\"FOUR_PLAYERS\"}"));
+
+		//all
+		mvc.perform(get("/api/res/all-res-for-num/{pnum}", 1234)).andExpect(jsonPath("$", hasSize(2)));
+
+		//in future
+		mvc.perform(get("/api/res/all-res-for-num-future/{pnum}", 123456)).andExpect(jsonPath("$", hasSize(1)));
+
+		//for court
+		mvc.perform(get("/api/res/all-res-for-court/{courtId}", 2)).andExpect(jsonPath("$", hasSize(1)));
+		mvc.perform(get("/api/res/all-res-for-court/{courtId}", 4)).andExpect(jsonPath("$", hasSize(2)));
+	}
 }

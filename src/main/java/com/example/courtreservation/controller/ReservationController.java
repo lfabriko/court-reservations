@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
@@ -57,20 +56,6 @@ public class ReservationController {
                         }
                     }
             );
-
-            /*LocalDateTime startDate = res.getStartDate();
-            LocalDateTime endDate = res.getEndDate();
-            Duration duration = Duration.between(startDate, endDate);
-            long durationInMinutes = duration.toMinutes();
-            if (durationInMinutes <= 0 || (Duration.between(LocalDateTime.now(), startDate).toMinutes() < 0)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrectly set start and end interval");
-            }
-            // total cost
-            //surface of desired court
-            long totalCost = c.getCs().getCostInMinutes()*durationInMinutes;
-            if (res.getKindOfGame() == KindOfGame.FOUR_PLAYERS) {
-                totalCost *= 1.5;
-            }*/
 
             res.setCourt(c);
             res.setMyUser(myUser);

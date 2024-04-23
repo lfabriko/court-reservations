@@ -9,7 +9,6 @@ import jakarta.persistence.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import static jakarta.persistence.Persistence.createEntityManagerFactory;
@@ -24,25 +23,6 @@ public class CourtRestController {
         Query q = entityManager.createQuery("from Court", Court.class);
         return q.getResultList();
     }
-
-    /*@PostMapping("/create-court-with-surface/{surfaceId}") // create
-    public Court createCourt(@PathVariable int surfaceId, @RequestBody Court court) {
-        inTransaction(em -> {
-            CourtSurface cs = em.find(CourtSurface.class, surfaceId);
-            if (cs == null) {
-                throw new RuntimeException("CourtSurface id not found  :" + surfaceId);
-            }
-            List<Court> list = em.createQuery("from Court", Court.class).getResultList();
-            list.stream().forEach(e -> System.out.println(e));
-            int maxCourtId = em.createQuery("select max(id) as max from Court c", Integer.class).getResultList().get(0);
-            Court court2 = new Court();
-            court2.setCs(cs);
-            court2.setId(++maxCourtId);
-            court2.setDescription(court.getDescription());
-            em.persist(court2);
-        });
-        return court;
-    }*/
 
     @PostMapping("/create-court-with-surface/{surfaceId}") // create
     public Court createCourt(@PathVariable int surfaceId, @RequestBody Court court) {
@@ -65,8 +45,6 @@ public class CourtRestController {
 
     @GetMapping("/single-court-view/{courtId}") // read
     public Court getSingleCourtView(@PathVariable int courtId) {
-        /*EntityManager em = entityManagerFactory.createEntityManager();
-        return em.find(Court.class, courtId);*/
         return inTransaction(em -> {return em.find(Court.class, courtId);});
     }
 
@@ -78,18 +56,6 @@ public class CourtRestController {
         });
     }
 
-    /*@PutMapping("/update/{surfaceId}")
-    public Court updateCourt(@PathVariable int surfaceId, @RequestBody Court court) {
-        inTransaction(em -> {
-            CourtSurface cs = em.find(CourtSurface.class, surfaceId);
-            Court c = em.find(Court.class, court.getId());
-            System.out.println("******CS******" + cs + ", ****C***" + c);
-            c.setCs(cs);
-            c.setDescription(court.getDescription());
-            em.merge(c);
-        });
-        return court;
-    }*/
     @PutMapping("/update/{surfaceId}")
     public Court updateCourt(@PathVariable int surfaceId, @RequestBody Court court) {
         return inTransaction(em -> {
@@ -102,24 +68,6 @@ public class CourtRestController {
         });
     }
 
-    /*void inTransaction(Consumer<EntityManager> work) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        try {
-            transaction.begin();
-            work.accept(entityManager);
-            transaction.commit();
-        }
-        catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw e;
-        }
-        finally {
-            entityManager.close();
-        }
-    }*/
 
     Court inTransaction(Function<EntityManager, Court> work) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
