@@ -112,6 +112,9 @@ public class ReservationController {
     public Reservation updateReservation(@PathVariable int courtId, @PathVariable String phoneNum, @RequestBody Reservation res) {
         return inTransaction(em -> {
             Reservation r = em.find(Reservation.class, res.getId());
+            if (r == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Reservation not found");
+            }
             Court c = em.find(Court.class, courtId);
             if (c == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Court not found");
