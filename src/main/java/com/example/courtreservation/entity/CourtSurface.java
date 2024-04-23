@@ -16,13 +16,10 @@ public class CourtSurface {
     @Column(name="cost_in_minutes")
     private int costInMinutes;
 
-    /*@OneToMany(cascade = CascadeType.ALL)//mappedBy = "court_surface", mappedBy = "id",
-    private Set<Court> courts;*/
-
     public CourtSurface() {}
     public CourtSurface(int id, int costInMinutes) {
         this.id = id;
-        this.costInMinutes = costInMinutes;//tady asi nema byt set courts
+        this.costInMinutes = costInMinutes;
     }
 
     public String toString(){

@@ -8,9 +8,8 @@ import lombok.Setter;
 @Entity
 public class Court {
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne//(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name="court_surface_id")
     private CourtSurface cs;
 

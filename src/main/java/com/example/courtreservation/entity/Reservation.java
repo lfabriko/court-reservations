@@ -22,20 +22,17 @@ public class Reservation {
     @JoinColumn(name="court_id")
     private Court court;
 
-    @ManyToOne// @Fetch(SELECT) //(cascade = {CascadeType.PERSIST})
+    @ManyToOne
     @JoinColumn(name="my_user_id")
     private MyUser myUser;
 
     @Column
     private String desc;
 
-    @Column//(name="start_date")
+    @Column
     private LocalDateTime startDate;
-    @Column//(name="end_date")
+    @Column
     private LocalDateTime endDate;
-
-    //@Column//(name="kind_of_game")
-    //private String kindOfGame;
 
     @Enumerated(EnumType.ORDINAL)
     private KindOfGame kindOfGame;
